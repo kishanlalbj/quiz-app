@@ -1,0 +1,33 @@
+@import "~bootstrap/scss/bootstrap";
+
+html {
+	height: 100%;
+}
+
+body {
+	margin: 0;
+	height: 100%;
+	background-color: #ecf0f1;
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+		"Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+		sans-serif;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+#root {
+	height: 100%;
+}
+.moveTop {
+	margin-top: 25px;
+}
+.moveLeft {
+	float: right;
+}
+
+.centering {
+	height: 70vh;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
