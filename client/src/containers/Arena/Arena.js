@@ -10,6 +10,7 @@ class Arena extends Component {
 		questions: this.props.questions,
 		currQuestionIndex: 0,
 		answers: [],
+		time: 0,
 		submitted: false,
 	};
 
@@ -21,6 +22,14 @@ class Arena extends Component {
 
 	componentDidMount() {
 		this.props.getQuestions(this.props.match.params.id);
+		fetch(`/api/quiz/${this.props.match.params.id}/time`)
+			.then((resp) => resp.json())
+			.then((data) => {
+				console.log(data.time.time);
+				this.setState({
+					time: data.time.time,
+				});
+			});
 	}
 
 	nextQuestion = () => {
@@ -72,23 +81,25 @@ class Arena extends Component {
 	render() {
 		const { id } = this.props.match.params;
 		const { loader } = this.props;
-		const { submitted } = this.state;
+		const { submitted, time } = this.state;
 		const currentQuestion = this.state.questions[this.state.currQuestionIndex];
 		const hidePreviousButton = this.state.currQuestionIndex === 0;
 		const hideNextButton =
 			this.state.currQuestionIndex === this.state.questions.length - 1;
-
+		console.log("Rendering time", time);
 		return (
 			<React.Fragment>
 				<div style={{ display: "flex", justifyContent: "space-between" }}>
 					<h4>Quiz: {id}</h4>
-					<Timer
-						minutes={1}
-						onTimeUp={this.submitQuiz}
-						submitted={submitted}
-					></Timer>
+					{time > 0 ? (
+						<Timer
+							minutes={time}
+							onTimeUp={this.submitQuiz}
+							submitted={submitted}
+						></Timer>
+					) : null}
 				</div>
-				<br></br>
+				{this.state.currQuestionIndex + 1} of {this.state.questions.length}
 				{loader ? (
 					<div className="centering">
 						<Spinner animation="border" role="status">

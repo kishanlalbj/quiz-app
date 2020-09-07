@@ -1,6 +1,6 @@
 const router = require("express").Router();
 const Quiz = require("../../models/Quiz");
-const { getQuiz } = require("./quizController");
+const { getQuiz, getQuizTime } = require("./quizController");
 const { checkAnswers } = require("../questions/questionsController");
 
 /**
@@ -34,6 +34,18 @@ router.post("/:id/submit", (req, res) => {
 		res.send({ points: resp });
 	} catch (error) {
 		console.log(error);
+		res.statusCode(500).send("Internal Server Error");
+	}
+});
+
+router.get("/:id/time", (req, res) => {
+	try {
+		let quizId = req.params.id;
+
+		let time = getQuizTime(quizId);
+		console.log("Time Left", time);
+		res.send({ time });
+	} catch (error) {
 		res.statusCode(500).send("Internal Server Error");
 	}
 });

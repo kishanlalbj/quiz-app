@@ -10,11 +10,15 @@ const QuestionPanel = (props) => {
 	};
 
 	useEffect(() => {
-		let result = props.selectedAnswer.filter(
-			(ans) => ans.questionId === props.questionId
-		);
+		let result = props.selectedAnswer.filter((ans) => {
+			return ans.questionId === props.questionId;
+		});
 		// console.log("rendering", result[0]);
 		if (result.length > 0) setSelected(result[0].answer);
+
+		return () => {
+			console.log("Clean Up");
+		};
 	}, [props.selectedAnswer, props.questionId]);
 
 	return (

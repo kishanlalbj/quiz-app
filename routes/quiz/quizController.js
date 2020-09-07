@@ -40,6 +40,19 @@ const getQuiz = async () => {
 	}
 };
 
+const getQuizTime = (quizId) => {
+	try {
+		let result = quiz.filter((q) => q.id == quizId);
+		console.log(result);
+		console.log(result[0].time);
+		return { time: result[0].time };
+	} catch (error) {
+		console.log(error);
+		return error;
+	}
+};
+
 module.exports = {
 	getQuiz,
+	getQuizTime,
 };

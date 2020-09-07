@@ -1,0 +1,13 @@
+.sidenav {
+	list-style: none;
+	display: block;
+	padding: 0;
+	li {
+		display: block;
+		margin-top: 10%;
+
+		&:hover {
+			cursor: pointer;
+		}
+	}
+}
