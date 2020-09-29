@@ -7,7 +7,7 @@ const { checkAnswers } = require("../questions/questionsController");
  * PATH: /api/quiz
  * METHOD: GET
  * Description: get all quiz
- * Access: private
+ * ACCESS: private
  */
 router.get("/all", async (req, res) => {
 	try {
@@ -36,6 +36,12 @@ router.post("/:id/submit", async (req, res) => {
 	}
 });
 
+/**
+ * PATH : /api/quiz/:quzId/time
+ * METHOD: GET
+ * DESCRIPTION: Get the duration of the quiz
+ * ACCESS: Private
+ */
 router.get("/:id/time", async (req, res) => {
 	try {
 		let quizId = req.params.id;
@@ -46,6 +52,12 @@ router.get("/:id/time", async (req, res) => {
 	}
 });
 
+/**
+ * PATH : /api/quiz/new
+ * METHOD: POST
+ * DESCRIPTION: Create a new Quiz
+ * ACCESS: Private
+ */
 router.post("/new", async (req, res) => {
 	try {
 		let quiz = await createQuiz(req.body);
@@ -56,6 +68,12 @@ router.post("/new", async (req, res) => {
 	}
 });
 
+/**
+ * PATH : /api/quiz/template/download
+ * METHOD: GET
+ * DESCRIPTION: Download the questions template file
+ * ACCESS: Private
+ */
 router.get("/template/download", (req, res) => {
 	try {
 		res.download(path.join(__dirname, "../../quizTemplate.json"));

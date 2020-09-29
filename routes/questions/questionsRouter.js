@@ -2,9 +2,10 @@ const router = require("express").Router();
 const questionsController = require("./questionsController");
 
 /**
- * router: /api/questions/
- * method: GET
- * access: Private
+ * PATH: /api/questions/:quizId
+ * METHOD: GET
+ * DESCRIPTION: Get questions for given quiz ID
+ * ACCESS: Private
  */
 router.get("/:quizId", async (req, res) => {
 	try {
@@ -18,6 +19,12 @@ router.get("/:quizId", async (req, res) => {
 	}
 });
 
+/**
+ * PATH: /api/questions/:quizId/upload
+ * METHOD: GET
+ * DESCRIPTION: upload the questions json file
+ * ACCESS: Private
+ */
 router.post("/:quizId/upload", async (req, res) => {
 	try {
 		const { quizId } = req.params;
