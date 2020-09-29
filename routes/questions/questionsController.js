@@ -46,8 +46,9 @@ const checkAnswers = async (quizId, answers) => {
 
 		let res = await Quiz.findById(quizId).select("passPercentage");
 
-		let percentageObtained =
-			(correctQuestions.length / quizQuestions.length) * 100;
+		let percentageObtained = Math.ceil(
+			(correctQuestions.length / quizQuestions.length) * 100
+		);
 
 		let result = {
 			percentage: percentageObtained,
