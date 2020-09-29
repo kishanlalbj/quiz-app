@@ -22,29 +22,58 @@ class NewQuiz extends Component {
 
 	onChangehandler = (e) => this.setState({ [e.target.name]: e.target.value });
 
+	downloadTemplate = async (e) => {
+		const res = await fetch("/api/quiz/template/download");
+		const blob = await res.blob();
+		const url = window.URL.createObjectURL(blob);
+		const link = document.createElement("a");
+		link.href = url;
+		link.setAttribute("download", "template.json");
+		document.body.appendChild(link);
+		link.click();
+		link.remove();
+	};
+
 	onSubmitHandler = async (e) => {
 		e.preventDefault();
 
-		const { quizName, category, difficulty, passPercentage, time } = this.state;
+		const {
+			quizName,
+			category,
+			difficulty,
+			passPercentage,
+			time,
+			selectedFile,
+		} = this.state;
+		if (
+			quizName &&
+			category &&
+			difficulty &&
+			passPercentage &&
+			time &&
+			selectedFile
+		) {
+			const formData = new FormData();
+			formData.append("myFile", this.state.selectedFile);
 
-		const formData = new FormData();
-		formData.append("myFile", this.state.selectedFile);
-
-		let [quizResponse] = await Promise.all([
-			axios.post("/api/quiz/new", {
-				quizName,
-				category,
-				difficulty,
-				passPercentage,
-				time,
-			}),
-		]);
-		console.log(quizResponse.data._id);
-		let uploadStatus = await axios.post(
-			`/api/questions/${quizResponse.data._id}/upload`,
-			formData
-		);
-		console.log(uploadStatus.data);
+			let [quizResponse] = await Promise.all([
+				axios.post("/api/quiz/new", {
+					quizName,
+					category,
+					difficulty,
+					passPercentage,
+					time,
+				}),
+			]);
+			console.log(quizResponse.data._id);
+			let uploadStatus = await axios.post(
+				`/api/questions/${quizResponse.data._id}/upload`,
+				formData
+			);
+			console.log(uploadStatus.data);
+		} else {
+			alert("Please fill all fields");
+		}
 	};
 
 	onFileChange = (e) => {
@@ -156,7 +185,9 @@ class NewQuiz extends Component {
 								<Col md={12}>
 									<center>
 										<FormGroup>
-											<Button variant="dark"> Download Sample </Button>
+											<Button onClick={this.downloadTemplate} variant="dark">
+												Download Sample
+											</Button>
 											&nbsp;
 											<Button variant="dark" type="submit">
 												Create

@@ -1,5 +1,5 @@
 const router = require("express").Router();
-const Quiz = require("../../models/Quiz");
+const path = require("path");
 const { getQuiz, getQuizTime, createQuiz } = require("./quizController");
 const { checkAnswers } = require("../questions/questionsController");
 
@@ -53,6 +53,15 @@ router.post("/new", async (req, res) => {
 	} catch (error) {
 		console.log(error);
 		res.statusCode(500).send("Internal Server Error");
+	}
+});
+
+router.get("/template/download", (req, res) => {
+	try {
+		res.download(path.join(__dirname, "../../quizTemplate.json"));
+	} catch (error) {
+		console.log(error);
+		res.status(500).send("Internal Server Error");
 	}
 });
 
