@@ -9,7 +9,7 @@ const Home = (props) => {
 
 	useEffect(() => {
 		getQuizzes();
-	}, []);
+	}, [getQuizzes]);
 
 	const onClickHandler = (e, index) => {
 		props.history.push("/quiz/" + index);

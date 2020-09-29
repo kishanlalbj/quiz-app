@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 
 const Timer = (props) => {
 	const [time, setTime] = useState(props.minutes * 60);
@@ -17,25 +17,25 @@ const Timer = (props) => {
 		}
 	};
 
+	// const memoizedCallback = useCallback(calculateTimeLeft, []);
+
 	const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
-	const { submitted } = props;
+	const { submitted, onTimeUp } = props;
 
 	useEffect(() => {
-		// console.log("Component Did Mount", time);
-
 		let timer = setTimeout(() => {
 			setTime(time - 1);
-			setTimeLeft(calculateTimeLeft());
+			setTimeLeft(ca());
 		}, 1000);
 
 		if (submitted) clearTimeout(timer);
 
 		if (time === -1) {
 			clearTimeout(timer);
-			props.onTimeUp();
+			onTimeUp();
 		}
 		return () => clearTimeout(timer);
-	}, [time]);
+	}, [time, calculateTimeLeft, submitted, onTimeUp]);
 
 	return (
 		<React.Fragment>

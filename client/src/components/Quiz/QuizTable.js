@@ -4,9 +4,10 @@ import { ListGroup, Container, Button } from "react-bootstrap";
 import { getQuizzes } from "../../store/actions/quizActions";
 
 const QuizTable = (props) => {
+	const { getQuizzes } = props;
 	useEffect(() => {
-		props.getQuizzes();
-	}, []);
+		getQuizzes();
+	}, [getQuizzes]);
 
 	return (
 		<React.Fragment>
