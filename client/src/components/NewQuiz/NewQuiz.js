@@ -71,6 +71,8 @@ class NewQuiz extends Component {
 				formData
 			);
 			console.log(uploadStatus.data);
+
+			this.props.history.push("/admin");
 		} else {
 			alert("Please fill all fields");
 		}
