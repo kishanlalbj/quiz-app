@@ -1,51 +1,32 @@
 const Quiz = require("../../models/Quiz");
 
-const quiz = [
-	{
-		id: 100,
-		name: "ReactJS",
-		category: "Front End",
-		time: 1,
-		totalQuestions: 10,
-		difficulty: "easy",
-		passPercentage: 70,
-	},
-	{
-		id: 101,
-		name: "NodeJS",
-		totalQuestions: 15,
-		time: 20,
-		difficulty: "easy",
-		category: "backEnd",
-		passPercentage: 60,
-	},
-	{
-		id: 103,
-		name: "MongoDB",
-		time: 15,
-		totalQuestions: 20,
-		difficulty: "easy",
-		category: "",
-		passPercentage: 60,
-	},
-];
-
 const getQuiz = async () => {
 	try {
 		let quizzes = await Quiz.find();
-		return quiz;
+		return quizzes;
 	} catch (error) {
 		console.log(error);
 		return error;
 	}
 };
 
-const getQuizTime = (quizId) => {
+const createQuiz = async (newQuiz) => {
 	try {
-		let result = quiz.filter((q) => q.id == quizId);
-		console.log(result);
-		console.log(result[0].time);
-		return { time: result[0].time };
+		let newQ = new Quiz(newQuiz);
+
+		let quiz = await newQ.save();
+
+		return quiz;
+	} catch (error) {
+		return error;
+	}
+};
+
+const getQuizTime = async (quizId) => {
+	try {
+		let result = await Quiz.findById(quizId).select("time");
+		console.log("GET TIMEEE", result);
+		return { time: result.time };
 	} catch (error) {
 		console.log(error);
 		return error;
@@ -55,4 +36,5 @@ const getQuizTime = (quizId) => {
 module.exports = {
 	getQuiz,
 	getQuizTime,
+	createQuiz,
 };

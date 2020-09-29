@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const QuizSchema = new Schema({
-	name: {
+	quizName: {
 		type: String,
 		required: true,
 	},
@@ -11,9 +11,17 @@ const QuizSchema = new Schema({
 		type: String,
 		required: true,
 	},
-	createdOn: {
-		type: Date,
-		default: Date.now(),
+	time: {
+		type: Number,
+		required: true,
+	},
+	difficulty: {
+		type: String,
+		required: true,
+	},
+	passPercentage: {
+		type: Number,
+		required: true,
 	},
 });
 

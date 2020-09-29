@@ -25,9 +25,8 @@ class Arena extends Component {
 		fetch(`/api/quiz/${this.props.match.params.id}/time`)
 			.then((resp) => resp.json())
 			.then((data) => {
-				console.log(data.time.time);
 				this.setState({
-					time: data.time.time,
+					time: data.time,
 				});
 			});
 	}
@@ -50,8 +49,6 @@ class Arena extends Component {
 	};
 
 	handleCaptureAnswer = (questionId, answer) => {
-		console.log("Capturing Answer", questionId, answer);
-
 		let copy = [...this.state.answers];
 		let obj = {
 			questionId,
@@ -69,7 +66,6 @@ class Arena extends Component {
 	};
 
 	submitQuiz = () => {
-		console.log("Submitting Quiz", this.state.answers);
 		alert("Submitting Quiz");
 		this.setState({
 			submitted: true,
@@ -86,7 +82,6 @@ class Arena extends Component {
 		const hidePreviousButton = this.state.currQuestionIndex === 0;
 		const hideNextButton =
 			this.state.currQuestionIndex === this.state.questions.length - 1;
-		console.log("Rendering time", time);
 		return (
 			<React.Fragment>
 				<div style={{ display: "flex", justifyContent: "space-between" }}>
@@ -108,7 +103,7 @@ class Arena extends Component {
 					</div>
 				) : this.state.questions.length > 0 ? (
 					<QuestionPanel
-						questionId={currentQuestion.id}
+						questionId={currentQuestion._id}
 						question={currentQuestion.question}
 						options={currentQuestion.options}
 						selectedAnswer={this.state.answers}

@@ -5,6 +5,7 @@ const logger = require("morgan");
 const mongoose = require("mongoose");
 const quizRouter = require("./routes/quiz/quizRouter");
 const questionsRouter = require("./routes/questions/questionsRouter");
+const fileupload = require("express-fileupload");
 require("dotenv").config();
 
 const app = express();
@@ -12,6 +13,7 @@ const app = express();
 app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.use(fileupload());
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 

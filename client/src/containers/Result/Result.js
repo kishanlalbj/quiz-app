@@ -5,14 +5,26 @@ const Result = (props) => {
 	return (
 		<div>
 			<h1>Result</h1>
-			<div className="centering">
-				You got <h1> &nbsp;{props.points} &nbsp; </h1> points
-			</div>
+			{props.result.passed ? (
+				<>
+					<p>
+						Congrats, You passed the quiz with{" "}
+						<span style={{ fontSize: "250%" }}>{props.result.percentage}</span>{" "}
+						%
+					</p>
+				</>
+			) : (
+				<>
+					You got{" "}
+					<span style={{ fontSize: "250%" }}>{props.result.percentage}</span> %.
+					Better Luck Next Time
+				</>
+			)}
 		</div>
 	);
 };
 const mapStateToProps = (state) => ({
-	points: state.quizStore.points,
+	result: state.quizStore.result,
 });
 
 export default connect(mapStateToProps, null)(Result);

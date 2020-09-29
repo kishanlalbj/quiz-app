@@ -1,100 +1,40 @@
-const questions = [
-	{
-		id: "200",
-		quizId: "100",
-		question: "What is ReactJS ?",
-		options: [
-			{
-				correct: false,
-				text: "A backend framework in Java",
-			},
-			{
-				correct: false,
-				text: "A Javascript framework for Backend",
-			},
-			{
-				correct: false,
-				text: "A MVC framework in javascript",
-			},
-			{
-				correct: true,
-				text: "A view framework in Javascript",
-			},
-		],
-	},
-	{
-		id: "201",
-		quizId: "100",
-		question: "How do you get direct acces to DOM ?",
-		options: [
-			{
-				correct: false,
-				text: "Context API",
-			},
-			{
-				correct: false,
-				text: "Memo",
-			},
-			{
-				correct: false,
-				text: "dangerouslysetInnerHTML",
-			},
-			{
-				correct: true,
-				text: "Ref",
-			},
-		],
-	},
-	{
-		id: "202",
-		quizId: "100",
-		question: "How to pass values between components ?",
-		options: [
-			{
-				correct: true,
-				text: "Context API",
-			},
-			{
-				correct: false,
-				text: "Provider",
-			},
-			{
-				correct: false,
-				text: "Consumer",
-			},
-			{
-				correct: false,
-				text: "React Router Params",
-			},
-		],
-	},
-];
+const Question = require("../../models/Questions");
+const Quiz = require("../../models/Quiz");
 
-const getQuestions = (qId) => {
+const getQuestions = async (qId) => {
 	try {
-		let results = questions.filter((ques) => ques.quizId === qId);
-
+		let results = await Question.find({ quizId: qId });
 		return results;
 	} catch (error) {
 		return error;
 	}
 };
 
-const checkAnswers = (quizId, answers) => {
+const addQuestionsInBulk = async (quizId, questions) => {
 	try {
-		console.log(answers);
-		let quizQuestions = questions.filter((ques) => ques.quizId === quizId);
-		let result = [];
-		let count = 0;
+		questions.forEach((ques) => {
+			ques.quizId = quizId;
+		});
+		console.log("Questions", questions);
+		let data = await Question.insertMany(questions);
+		return data;
+	} catch (error) {
+		return error;
+	}
+};
+
+const checkAnswers = async (quizId, answers) => {
+	try {
+		console.log(quizId, answers);
+		let quizQuestions = await Question.find({ quizId: quizId });
+		let correctQuestions = [];
+
 		for (let i = 0; i < quizQuestions.length; i++) {
 			for (let j = 0; j < answers.length; j++) {
-				// console.log(quizQuestions[i].id, answers[j].questionId);
-
-				if (quizQuestions[i].id === answers[j].questionId) {
+				if (quizQuestions[i]._id.toString() === answers[j].questionId) {
 					quizQuestions[i].options.map((option) => {
 						if (option.text === answers[j].answer && option.correct) {
-							count++;
-							result.push({
+							correctQuestions.push({
 								questionId: answers[j].questionId,
 								correct: option.correct,
 							});
@@ -103,7 +43,22 @@ const checkAnswers = (quizId, answers) => {
 				}
 			}
 		}
-		return count;
+
+		let res = await Quiz.findById(quizId).select("passPercentage");
+
+		let percentageObtained =
+			(correctQuestions.length / quizQuestions.length) * 100;
+
+		let result = {
+			percentage: percentageObtained,
+			score: correctQuestions.length,
+		};
+		if (percentageObtained >= res.passPercentage) {
+			result.passed = true;
+		} else {
+			result.passed = false;
+		}
+		return result;
 	} catch (error) {
 		return error;
 	}
@@ -112,4 +67,5 @@ const checkAnswers = (quizId, answers) => {
 module.exports = {
 	getQuestions,
 	checkAnswers,
+	addQuestionsInBulk,
 };

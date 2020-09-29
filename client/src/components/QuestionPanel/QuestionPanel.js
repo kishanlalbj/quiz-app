@@ -13,7 +13,6 @@ const QuestionPanel = (props) => {
 		let result = props.selectedAnswer.filter((ans) => {
 			return ans.questionId === props.questionId;
 		});
-		// console.log("rendering", result[0]);
 		if (result.length > 0) setSelected(result[0].answer);
 
 		return () => {
@@ -39,7 +38,7 @@ const QuestionPanel = (props) => {
 									<Card
 										body
 										text={selected === opt.text ? "light" : "dark"}
-										bg={selected === opt.text ? "primary" : null}
+										bg={selected === opt.text ? "dark" : null}
 									>
 										{opt.text}
 									</Card>
@@ -58,14 +57,18 @@ const QuestionPanel = (props) => {
 				>
 					<div>
 						{!props.hidePrevious ? (
-							<Button onClick={props.onPrevious}>Previous</Button>
+							<Button variant="dark" onClick={props.onPrevious}>
+								Previous
+							</Button>
 						) : null}
 					</div>
 					<div>
 						{!props.hideNext ? (
-							<Button onClick={props.onNext}>Next</Button>
+							<Button variant="dark" onClick={props.onNext}>
+								Next
+							</Button>
 						) : (
-							<Button variant="primary" onClick={props.onSubmit}>
+							<Button variant="dark" onClick={props.onSubmit}>
 								Submit
 							</Button>
 						)}

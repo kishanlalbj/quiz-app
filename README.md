@@ -1,3 +1,3 @@
 # quiz-app
 
-Bsic Quiz application
+Basic Quiz application

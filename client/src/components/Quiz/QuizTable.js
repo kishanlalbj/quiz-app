@@ -14,7 +14,10 @@ const QuizTable = (props) => {
 				<br></br>
 				<div style={{ display: "flex", justifyContent: "space-between" }}>
 					<h4> Quizzes </h4>
-					<Button onClick={() => props.history.push("/admin/new-quiz")}>
+					<Button
+						variant="dark"
+						onClick={() => props.history.push("/admin/new-quiz")}
+					>
 						New Quiz
 					</Button>
 				</div>
@@ -22,7 +25,9 @@ const QuizTable = (props) => {
 
 				<ListGroup>
 					{props.quizzes.map((quiz) => {
-						return <ListGroup.Item key={quiz.id}>{quiz.name}</ListGroup.Item>;
+						return (
+							<ListGroup.Item key={quiz._id}>{quiz.quizName}</ListGroup.Item>
+						);
 					})}
 				</ListGroup>
 			</Container>

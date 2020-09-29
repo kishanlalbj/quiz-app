@@ -5,7 +5,7 @@ const INITIAL_STATE = {
 	questions: [],
 	loader: false,
 	currentQuestionIndex: 0,
-	points: 0,
+	result: {},
 };
 
 const quizReducer = (state = INITIAL_STATE, action) => {
@@ -28,7 +28,7 @@ const quizReducer = (state = INITIAL_STATE, action) => {
 		case QUIZ.CURRENT_QUIZ_RESULT:
 			return {
 				...state,
-				points: action.payload * 10,
+				result: { ...action.payload },
 			};
 		default:
 			return state;

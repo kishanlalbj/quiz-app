@@ -21,7 +21,7 @@ const Timer = (props) => {
 	const { submitted } = props;
 
 	useEffect(() => {
-		console.log("Component Did Mount", time);
+		// console.log("Component Did Mount", time);
 
 		let timer = setTimeout(() => {
 			setTime(time - 1);

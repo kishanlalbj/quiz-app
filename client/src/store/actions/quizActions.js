@@ -39,9 +39,10 @@ export const submitQuiz = (quizId, answers) => (dispatch) => {
 	})
 		.then((resp) => resp.json())
 		.then((data) => {
+			console.log(data);
 			dispatch({
 				type: QUIZ.CURRENT_QUIZ_RESULT,
-				payload: data.points,
+				payload: data,
 			});
 			dispatch(setLoader(false));
 		})

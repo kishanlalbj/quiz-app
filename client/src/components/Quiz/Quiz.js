@@ -8,7 +8,7 @@ const Quiz = (props) => {
 				<Card.Body>
 					<Card.Title>{props.name}</Card.Title>
 					<Card.Subtitle className="mb-2 text-muted">
-						{props.totalQuestions} questions
+						{props.category}
 					</Card.Subtitle>
 					<Button
 						variant="dark"

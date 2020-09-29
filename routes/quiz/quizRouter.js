@@ -1,6 +1,6 @@
 const router = require("express").Router();
 const Quiz = require("../../models/Quiz");
-const { getQuiz, getQuizTime } = require("./quizController");
+const { getQuiz, getQuizTime, createQuiz } = require("./quizController");
 const { checkAnswers } = require("../questions/questionsController");
 
 /**
@@ -24,29 +24,36 @@ router.get("/all", async (req, res) => {
  * DESCRIPTION: submit a quiz
  * ACCESS: Private
  */
-router.post("/:id/submit", (req, res) => {
+router.post("/:id/submit", async (req, res) => {
 	try {
 		let quizId = req.params.id;
 		let answers = req.body;
-		// console.log(quizId, answers);
-		let resp = checkAnswers(quizId, answers);
-		console.log(resp);
-		res.send({ points: resp });
+		let resp = await checkAnswers(quizId, answers);
+		res.send(resp);
 	} catch (error) {
 		console.log(error);
 		res.statusCode(500).send("Internal Server Error");
 	}
 });
 
-router.get("/:id/time", (req, res) => {
+router.get("/:id/time", async (req, res) => {
 	try {
 		let quizId = req.params.id;
-
-		let time = getQuizTime(quizId);
-		console.log("Time Left", time);
-		res.send({ time });
+		let time = await getQuizTime(quizId);
+		res.send(time);
 	} catch (error) {
 		res.statusCode(500).send("Internal Server Error");
 	}
 });
+
+router.post("/new", async (req, res) => {
+	try {
+		let quiz = await createQuiz(req.body);
+		res.send(quiz);
+	} catch (error) {
+		console.log(error);
+		res.statusCode(500).send("Internal Server Error");
+	}
+});
+
 module.exports = router;
