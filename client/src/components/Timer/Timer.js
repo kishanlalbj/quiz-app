@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 
 const Timer = (props) => {
 	const [time, setTime] = useState(props.minutes * 60);
@@ -25,7 +25,7 @@ const Timer = (props) => {
 	useEffect(() => {
 		let timer = setTimeout(() => {
 			setTime(time - 1);
-			setTimeLeft(ca());
+			setTimeLeft(calculateTimeLeft());
 		}, 1000);
 
 		if (submitted) clearTimeout(timer);
