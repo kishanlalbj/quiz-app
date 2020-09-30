@@ -2,8 +2,9 @@ const User = require("../models/User");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const passport = require("passport");
+const config = require("../config");
 
-const registerUser = async (userDetails) => {
+const registerUser = async (userDetails, role) => {
 	try {
 		let username = await User.findOne({ username: userDetails.username });
 		let email = await User.findOne({ email: userDetails.email });
@@ -54,15 +55,21 @@ const login = async (userCreds) => {
 
 		let isMatch = await bcrypt.compare(userCreds.password, user.password);
 
-		if (isMatch) {
-			jwt.sign();
-		}
-
-		console.log(obj);
-		return {
-			success: true,
-			message: obj,
+		const payload = {
+			name: user.name,
+			username: user.username,
+			email: user.email,
+			role: user.role,
 		};
+
+		if (isMatch) {
+			let token = await jwt.sign(payload, config.SECRET, { expiresIn: "2h" });
+			console.log(token);
+			return {
+				success: true,
+				message: `Bearer ${token}`,
+			};
+		}
 	} catch (error) {
 		return {
 			success: false,
