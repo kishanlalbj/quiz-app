@@ -35,6 +35,7 @@ const Timer = (props) => {
 			onTimeUp();
 		}
 		return () => clearTimeout(timer);
+		// eslint-disable-next-line
 	}, [time, calculateTimeLeft, submitted, onTimeUp]);
 
 	return (

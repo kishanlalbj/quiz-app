@@ -15,7 +15,6 @@ const addQuestionsInBulk = async (quizId, questions) => {
 		questions.forEach((ques) => {
 			ques.quizId = quizId;
 		});
-		console.log("Questions", questions);
 		let data = await Question.insertMany(questions);
 		return data;
 	} catch (error) {
@@ -25,7 +24,6 @@ const addQuestionsInBulk = async (quizId, questions) => {
 
 const checkAnswers = async (quizId, answers) => {
 	try {
-		console.log(quizId, answers);
 		let quizQuestions = await Question.find({ quizId: quizId });
 		let correctQuestions = [];
 

@@ -5,7 +5,10 @@ const logger = require("morgan");
 const mongoose = require("mongoose");
 const quizRouter = require("./routes/quiz/quizRouter");
 const questionsRouter = require("./routes/questions/questionsRouter");
+const authRouter = require("./routes/user/userRouter");
 const fileupload = require("express-fileupload");
+const config = require("./config");
+
 require("dotenv").config();
 
 const app = express();
@@ -18,12 +21,12 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
 mongoose
-	.connect(process.env.DATABASE_URL, {
+	.connect(config.DATABASE_URL, {
 		useNewUrlParser: true,
 		useUnifiedTopology: true,
 		useCreateIndex: true,
 	})
-	.then((status) => {
+	.then(() => {
 		console.log("Database connected");
 	})
 	.catch((err) => {
@@ -32,5 +35,6 @@ mongoose
 
 app.use("/api/quiz", quizRouter);
 app.use("/api/questions", questionsRouter);
+app.use("/api/auth", authRouter);
 
 module.exports = app;
