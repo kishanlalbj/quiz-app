@@ -4,6 +4,7 @@ import { getQuestions, submitQuiz } from "../../store/actions/quizActions";
 import { Spinner } from "react-bootstrap";
 import QuestionPanel from "../../components/QuestionPanel/QuestionPanel";
 import Timer from "../../components/Timer/Timer";
+import axios from "axios";
 
 class Arena extends Component {
 	state = {
@@ -22,13 +23,11 @@ class Arena extends Component {
 
 	componentDidMount() {
 		this.props.getQuestions(this.props.match.params.id);
-		fetch(`/api/quiz/${this.props.match.params.id}/time`)
-			.then((resp) => resp.json())
-			.then((data) => {
-				this.setState({
-					time: data.time,
-				});
+		axios.get(`/api/quiz/${this.props.match.params.id}/time`).then((data) => {
+			this.setState({
+				time: data.time,
 			});
+		});
 	}
 
 	nextQuestion = () => {

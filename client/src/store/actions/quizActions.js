@@ -1,9 +1,12 @@
-const { QUIZ } = require("../types/quizTypes");
+import { QUIZ } from "../types/quizTypes";
+import axios from "axios";
 
 export const getQuizzes = () => (dispatch) => {
 	dispatch(setLoader(true));
-	fetch("/api/quiz/all")
-		.then((resp) => resp.json())
+
+	axios
+		.get("/api/quiz/all")
+
 		.then((data) => {
 			dispatch(setLoader(false));
 
@@ -16,30 +19,24 @@ export const getQuizzes = () => (dispatch) => {
 
 export const getQuestions = (quizId) => (dispatch) => {
 	dispatch(setLoader(true));
-	fetch(`/api/questions/${quizId}`)
-		.then((resp) => resp.json())
-		.then((data) => {
-			console.log(data);
-			dispatch(setLoader(false));
-			return dispatch({
-				type: QUIZ.GET_QUESTIONS,
-				payload: data,
-			});
+	axios.get(`/api/questions/${quizId}`).then((data) => {
+		console.log(data);
+		dispatch(setLoader(false));
+		return dispatch({
+			type: QUIZ.GET_QUESTIONS,
+			payload: data,
 		});
+	});
 };
 
 export const submitQuiz = (quizId, answers) => (dispatch) => {
 	dispatch(setLoader(true));
-	console.log(answers);
-	fetch(`/api/quiz/${quizId}/submit`, {
-		method: "POST",
-		node: "cors",
-		headers: { "Content-Type": "application/json" },
-		body: JSON.stringify(answers),
-	})
-		.then((resp) => resp.json())
+
+	axios
+		.post(`/api/quiz/${quizId}/submit`, {
+			data: answers,
+		})
 		.then((data) => {
-			console.log(data);
 			dispatch({
 				type: QUIZ.CURRENT_QUIZ_RESULT,
 				payload: data,

@@ -7,6 +7,7 @@ import Home from "./Home/Home";
 import Arena from "./Arena/Arena";
 import Result from "./Result/Result";
 import Admin from "./Admin/Admin";
+import Login from "./Login/Login";
 
 function App() {
 	return (
@@ -17,7 +18,8 @@ function App() {
 
 			<Container className="moveTop">
 				<Switch>
-					<Route exact path="/" component={Home} />
+					<Route exact path="/" component={Login} />
+					<Route exact path="/home" component={Home} />
 					<Route exact path="/quiz/:id" component={Arena} />
 					<Route exact path="/quiz/:id/result" component={Result} />
 				</Switch>
