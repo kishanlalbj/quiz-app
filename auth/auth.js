@@ -1,7 +1,6 @@
 const User = require("../models/User");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const passport = require("passport");
 const config = require("../config");
 
 const registerUser = async (userDetails, role) => {
@@ -27,6 +26,7 @@ const registerUser = async (userDetails, role) => {
 		let newUser = new User({
 			...userDetails,
 			password: hashed,
+			role,
 		});
 
 		await newUser.save();
@@ -56,6 +56,7 @@ const login = async (userCreds) => {
 		let isMatch = await bcrypt.compare(userCreds.password, user.password);
 
 		const payload = {
+			id: user._id,
 			name: user.name,
 			username: user.username,
 			email: user.email,
@@ -63,7 +64,9 @@ const login = async (userCreds) => {
 		};
 
 		if (isMatch) {
-			let token = await jwt.sign(payload, config.SECRET, { expiresIn: "2h" });
+			let token = await jwt.sign(payload, config.SECRET, {
+				expiresIn: "2 days",
+			});
 			console.log(token);
 			return {
 				success: true,
@@ -78,7 +81,16 @@ const login = async (userCreds) => {
 	}
 };
 
+const checkRoles = (roles) => (req, res, next) => {
+	if (roles.includes(req.user.role)) {
+		next();
+	} else {
+		return res.status(403).json({ message: "You are not authorized" });
+	}
+};
+
 module.exports = {
 	registerUser,
 	login,
+	checkRoles,
 };

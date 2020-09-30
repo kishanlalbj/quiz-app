@@ -2,6 +2,26 @@ const router = require("express").Router();
 const path = require("path");
 const { getQuiz, getQuizTime, createQuiz } = require("./quizController");
 const { checkAnswers } = require("../questions/questionsController");
+const passport = require("passport");
+const { checkRoles } = require("../../auth/auth");
+
+router.get(
+	"/user",
+	passport.authenticate("jwt", { session: false }),
+	checkRoles(["user", "admin"]),
+	(req, res) => {
+		res.send("USER LOGIN SUCCESS FULL");
+	}
+);
+
+router.get(
+	"/admin",
+	passport.authenticate("jwt", { session: false }),
+	checkRoles(["admin"]),
+	(req, res) => {
+		res.send("ADMIN LOGIN SUCCESS FULL");
+	}
+);
 
 /**
  * PATH: /api/quiz
@@ -9,14 +29,19 @@ const { checkAnswers } = require("../questions/questionsController");
  * Description: get all quiz
  * ACCESS: private
  */
-router.get("/all", async (req, res) => {
-	try {
-		let resp = await getQuiz();
-		res.send(resp);
-	} catch (error) {
-		res.statusCode(500).send("Internal Server Error");
+router.get(
+	"/all",
+	passport.authenticate("jwt", { session: false }),
+	checkRoles(["admin"]),
+	async (req, res) => {
+		try {
+			let resp = await getQuiz();
+			res.status(200).json(resp);
+		} catch (error) {
+			res.status(500).send("Internal Server Error");
+		}
 	}
-});
+);
 
 /**
  * PATH : /api/quiz/:quzId/submit
@@ -58,15 +83,20 @@ router.get("/:id/time", async (req, res) => {
  * DESCRIPTION: Create a new Quiz
  * ACCESS: Private
  */
-router.post("/new", async (req, res) => {
-	try {
-		let quiz = await createQuiz(req.body);
-		res.send(quiz);
-	} catch (error) {
-		console.log(error);
-		res.statusCode(500).send("Internal Server Error");
+router.post(
+	"/new",
+	passport.authenticate("jwt", { session: false }),
+	checkRoles(["admin"]),
+	async (req, res) => {
+		try {
+			let quiz = await createQuiz(req.body);
+			res.send(quiz);
+		} catch (error) {
+			console.log(error);
+			res.statusCode(500).send("Internal Server Error");
+		}
 	}
-});
+);
 
 /**
  * PATH : /api/quiz/template/download

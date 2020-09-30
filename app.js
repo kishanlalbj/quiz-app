@@ -7,9 +7,10 @@ const quizRouter = require("./routes/quiz/quizRouter");
 const questionsRouter = require("./routes/questions/questionsRouter");
 const authRouter = require("./routes/user/userRouter");
 const fileupload = require("express-fileupload");
+const passport = require("passport");
 const config = require("./config");
-
 require("dotenv").config();
+require("./auth/passport")(passport);
 
 const app = express();
 
@@ -18,6 +19,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(fileupload());
 app.use(cookieParser());
+app.use(passport.initialize());
 app.use(express.static(path.join(__dirname, "public")));
 
 mongoose
