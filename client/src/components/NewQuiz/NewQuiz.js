@@ -23,8 +23,9 @@ class NewQuiz extends Component {
 	onChangehandler = (e) => this.setState({ [e.target.name]: e.target.value });
 
 	downloadTemplate = async (e) => {
-		const res = await axios.get("/api/quiz/template/download");
-		const blob = await res.blob();
+		const res = await axios.get("/api/quiz/template/download", { responseType: "blob" });
+		console.log(res)
+		const blob = await res.data;
 		const url = window.URL.createObjectURL(blob);
 		const link = document.createElement("a");
 		link.href = url;
