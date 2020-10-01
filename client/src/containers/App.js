@@ -13,6 +13,7 @@ import setAuthHeader from "../utils/api";
 import { connect } from "react-redux";
 import { AUTH_TYPES } from "../store/types/authTypes";
 import ProtectedRoute from "../utils/ProtectedRoute";
+import Registration from "./Registration/Registration";
 
 class App extends Component {
   constructor(props) {
@@ -42,6 +43,7 @@ class App extends Component {
         <Container className="moveTop">
           <Switch>
             <Route exact path="/" component={Login} />
+            <Route exact path="/register" component={Registration} />
             <ProtectedRoute path="/admin" component={Admin} />
             <ProtectedRoute exact path="/home" component={Home} />
             <ProtectedRoute exact path="/quiz/:id" component={Arena} />
