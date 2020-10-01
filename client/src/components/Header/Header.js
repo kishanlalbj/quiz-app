@@ -24,19 +24,15 @@ const Header = (props) => {
           </Link>
         </Navbar.Brand>
 
-		<Navbar.Toggle aria-controls="responsive-navbar-nav" />
+        <Navbar.Toggle aria-controls="responsive-navbar-nav" />
 
-		<Navbar.Collapse id="responsive-navbar-nav">
+        <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="mr-auto"></Nav>
           <Nav>
             {props.authenticated ? (
               <React.Fragment>
-                <Nav.Link>
-                  {props.user?.name}
-                </Nav.Link>
-				<Nav.Link onClick={props.logout}>
-					Logout
-				</Nav.Link>
+                <Nav.Link>{props.user?.name}</Nav.Link>
+                <Nav.Link onClick={props.logout}>Logout</Nav.Link>
               </React.Fragment>
             ) : null}
           </Nav>
@@ -51,9 +47,8 @@ const mapStateToProps = (state) => ({
   user: state.authStore.user,
 });
 
-
-const mapDispatchToProps = dispatch => ({
-	logout: () => dispatch(logout())
-})
+const mapDispatchToProps = (dispatch) => ({
+  logout: () => dispatch(logout()),
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(Header);
