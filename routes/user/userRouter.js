@@ -1,6 +1,8 @@
 const router = require("express").Router();
 const auth = require("../../auth/auth");
 const roles = require("../../auth/roles");
+const passport = require("passport");
+const { checkRoles } = require("../../auth/auth");
 
 /**
  * @path /api/auth/register
@@ -9,14 +11,14 @@ const roles = require("../../auth/roles");
  * @access public
  */
 router.post("/register", async (req, res) => {
-	try {
-		let resp = await auth.registerUser(req.body, roles.USER);
+  try {
+    let resp = await auth.registerUser(req.body, roles.USER);
 
-		if (resp.success) res.status(201).json(resp);
-		else res.status(500).json(resp);
-	} catch (error) {
-		res.status(500).send({ message: "Internal Server Error" });
-	}
+    if (resp.success) res.status(201).json(resp);
+    else res.status(500).json(resp);
+  } catch (error) {
+    res.status(500).send({ message: "Internal Server Error" });
+  }
 });
 
 /**
@@ -26,14 +28,13 @@ router.post("/register", async (req, res) => {
  * @access public
  */
 router.post("/admin/register", async (req, res) => {
-	try {
-		let resp = await auth.registerUser(req.body, roles.ADMIN);
-
-		if (resp.success) res.status(200).json(resp);
-		else res.status(400).json(resp);
-	} catch (error) {
-		res.status(500).send({ message: "Internal Server Error" });
-	}
+  try {
+    let resp = await auth.registerUser(req.body, roles.ADMIN);
+    if (resp.success) res.status(200).json(resp);
+    else res.status(400).json(resp);
+  } catch (error) {
+    res.status(500).send({ message: "Internal Server Error" });
+  }
 });
 
 /**
@@ -43,27 +44,37 @@ router.post("/admin/register", async (req, res) => {
  * @access public
  */
 router.post("/login", async (req, res) => {
-	try {
-		let resp = await auth.login(req.body);
+  try {
+    let resp = await auth.login(req.body);
 
-		if (resp.success) res.status(200).json(resp);
-		else res.status(500).json(resp);
-	} catch (error) {
-		res.status(500).send({ message: "Internal Server Error" });
-	}
+    if (resp.success) res.status(200).json(resp);
+    else res.status(500).json(resp);
+  } catch (error) {
+    res.status(500).send({ message: "Internal Server Error" });
+  }
 });
 
 /**
- * @path /api/auth/logut
- * @method GET
+ * @path /api/auth/logout
+ * @method POST
  * @description Logs out the user
  * @access public
  */
-router.get("/logout", async (req, res) => {
-	try {
-	} catch (error) {
-		res.status(500).send({ message: "Internal Server Error" });
-	}
-});
+router.post(
+  "/logout",
+  passport.authenticate("jwt", { session: false }),
+  checkRoles([roles.ADMIN, roles.USER]),
+  async (req, res) => {
+    try {
+      req.logOut();
+      res.send({
+        success: true,
+        message: "Successfully logged out",
+      });
+    } catch (error) {
+      res.status(500).send({ message: "Internal Server Error" });
+    }
+  }
+);
 
 module.exports = router;

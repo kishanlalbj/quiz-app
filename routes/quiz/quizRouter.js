@@ -36,6 +36,8 @@ router.get(
 	checkRoles([roles.ADMIN, roles.USER]),
 	async (req, res) => {
 		try {
+		console.log(req.user)
+
 			let resp = await getQuiz();
 			res.status(200).json(resp);
 		} catch (error) {

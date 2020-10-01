@@ -81,6 +81,7 @@ const login = async (userCreds) => {
 	}
 };
 
+
 const checkRoles = (roles) => (req, res, next) => {
 	if (roles.includes(req.user.role)) {
 		next();

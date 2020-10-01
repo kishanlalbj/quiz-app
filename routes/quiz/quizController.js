@@ -25,7 +25,6 @@ const createQuiz = async (newQuiz) => {
 const getQuizTime = async (quizId) => {
 	try {
 		let result = await Quiz.findById(quizId).select("time");
-		console.log("GET TIMEEE", result);
 		return { time: result.time };
 	} catch (error) {
 		console.log(error);

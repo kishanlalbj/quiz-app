@@ -1,34 +1,34 @@
 @import "~bootstrap/scss/bootstrap";
 
 html {
-	height: 100%;
+  height: 100%;
 }
 
 body {
-	margin: 0;
-	height: 100%;
-	background-color: #ecf0f1;
+  margin: 0;
+  height: 100%;
+  background-color: whitesmoke;
 }
 
 #root {
-	height: 100%;
+  height: 100%;
 }
 .moveTop {
-	margin-top: 25px;
+  margin-top: 25px;
 }
 .moveLeft {
-	float: right;
+  float: right;
 }
 
 .centering {
-	height: 70vh;
-	display: flex;
-	justify-content: center;
-	align-items: center;
+  height: 70vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 html,
 body {
-	max-width: 100%;
-	overflow-x: hidden;
+  max-width: 100%;
+  overflow-x: hidden;
 }

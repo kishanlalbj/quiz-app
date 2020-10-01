@@ -1,0 +1,5 @@
+export const AUTH_TYPES = {
+    LOGIN: "LOGIN",
+    LOGOUT: "LOGOUT",
+    SET_USER_DETAILS: "SET_USER_DETAILS"
+}

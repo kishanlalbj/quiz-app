@@ -1,29 +1,41 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Container, Form, Card, Button } from "react-bootstrap";
 import axios from "axios";
 import "./Login.scss";
 import setAuthHeader from "../../utils/api";
 import jwt_decode from "jwt-decode";
+import { connect } from "react-redux";
+import { login } from "../../store/actions/authActions";
 
 const Login = (props) => {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
-	// const [username, setUsername] = useState("");
+
+	useEffect(() => {
+		const { user } = props
+			if(user?.role === "admin") {
+				props.history.push("/admin")
+			} else if(user?.role === "user") {
+				props.history.push("/home")
+			}
+	},[props.user, props.authenticated, props.login])
 
 	const onSubmitHandler = async (e) => {
 		try {
 			e.preventDefault();
 			console.log(email, password);
-			let response = await axios.post("/api/auth/login", { email, password });
-			console.log(response);
-			if (response.data.success) {
-				localStorage.setItem("jwtToken", response.data.message);
-				setAuthHeader(response.data.message);
-				const decoded = jwt_decode(localStorage.jwtToken);
-				console.log("Login", decoded);
-				if (decoded.role === "admin") props.history.push("/admin");
-				else props.history.push("/home");
-			}
+
+			props.login(email,password)
+			// let response = await axios.post("/api/auth/login", { email, password });
+			// console.log(response);
+			// if (response.data.success) {
+			// 	localStorage.setItem("jwtToken", response.data.message);
+			// 	setAuthHeader(response.data.message);
+			// 	const decoded = jwt_decode(localStorage.jwtToken);
+			// 	console.log("Login", decoded);
+			// 	if (decoded.role === "admin") props.history.push("/admin");
+			// 	else props.history.push("/home");
+			// }
 		} catch (error) {
 			console.log(error);
 		}
@@ -83,4 +95,12 @@ const Login = (props) => {
 	);
 };
 
-export default Login;
+const mapStateToProps = state => ({
+	authenticated: state.authStore.authenticated,
+	user: state.authStore.user
+})
+
+const mapDispatchToProps = dispatch => ({
+	login: (email, password) => dispatch(login(email,password))
+})
+export default connect(mapStateToProps, mapDispatchToProps)(Login);

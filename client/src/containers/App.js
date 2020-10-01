@@ -10,43 +10,52 @@ import Result from "./Result/Result";
 import Admin from "./Admin/Admin";
 import Login from "./Login/Login";
 import setAuthHeader from "../utils/api";
+import { connect } from "react-redux";
+import { AUTH_TYPES } from "../store/types/authTypes";
+import ProtectedRoute from "../utils/ProtectedRoute";
 
 class App extends Component {
-	constructor(props) {
-		super(props);
-		if (localStorage.jwtToken) {
-			setAuthHeader(localStorage.getItem("jwtToken"));
-			const decoded = jwt_decode(localStorage.jwtToken);
-			console.log(decoded);
-			const currentTime = Date.now() / 1000;
-			if (decoded.exp < currentTime) {
-				this.props.history.push("/");
-			} else {
-				if (decoded.role === "admin") this.props.history.push("/admin");
-				else this.props.history.push("/home");
-			}
-		} else {
-			this.props.history.push("/");
-		}
-	}
-	render() {
-		return (
-			<React.Fragment>
-				<Header></Header>
+  constructor(props) {
+    super(props);
+    if (localStorage.jwtToken) {
+      const token = localStorage.getItem("jwtToken");
+      setAuthHeader(token);
+      const decoded = jwt_decode(token);
+      const currentTime = Date.now() / 1000;
+      if (decoded.exp < currentTime) {
+        this.props.history.push("/");
+      } else {
+        if (decoded.role === "admin") this.props.history.push("/admin");
+        else this.props.history.push("/home");
+        this.props.setUser(decoded);
+      }
+    } else {
+      this.props.history.push("/");
+    }
+  }
 
-				<Route path="/admin" component={Admin} />
+  render() {
+    return (
+      <React.Fragment>
+        <Header></Header>
 
-				<Container className="moveTop">
-					<Switch>
-						<Route exact path="/" component={Login} />
-						<Route exact path="/home" component={Home} />
-						<Route exact path="/quiz/:id" component={Arena} />
-						<Route exact path="/quiz/:id/result" component={Result} />
-					</Switch>
-				</Container>
-			</React.Fragment>
-		);
-	}
+        <Container className="moveTop">
+          <Switch>
+            <Route exact path="/" component={Login} />
+            <ProtectedRoute path="/admin" component={Admin} />
+            <ProtectedRoute exact path="/home" component={Home} />
+            <ProtectedRoute exact path="/quiz/:id" component={Arena} />
+            <ProtectedRoute exact path="/quiz/:id/result" component={Result} />
+          </Switch>
+        </Container>
+      </React.Fragment>
+    );
+  }
 }
 
-export default withRouter(App);
+const mapDispatchToProps = (dispatch) => ({
+  setUser: (user) =>
+    dispatch({ type: AUTH_TYPES.SET_USER_DETAILS, payload: user }),
+});
+
+export default connect(null, mapDispatchToProps)(withRouter(App));
