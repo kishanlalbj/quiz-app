@@ -7,24 +7,23 @@ export const getQuizzes = () => (dispatch) => {
 	axios
 		.get("/api/quiz/all")
 
-		.then((data) => {
+		.then((response) => {
 			dispatch(setLoader(false));
 
 			return dispatch({
 				type: QUIZ.GET_QUIZ,
-				payload: data,
+				payload: response.data,
 			});
 		});
 };
 
 export const getQuestions = (quizId) => (dispatch) => {
 	dispatch(setLoader(true));
-	axios.get(`/api/questions/${quizId}`).then((data) => {
-		console.log(data);
+	axios.get(`/api/questions/${quizId}`).then((response) => {
 		dispatch(setLoader(false));
 		return dispatch({
 			type: QUIZ.GET_QUESTIONS,
-			payload: data,
+			payload: response.data,
 		});
 	});
 };
@@ -32,14 +31,14 @@ export const getQuestions = (quizId) => (dispatch) => {
 export const submitQuiz = (quizId, answers) => (dispatch) => {
 	dispatch(setLoader(true));
 
+	console.log(answers);
+
 	axios
-		.post(`/api/quiz/${quizId}/submit`, {
-			data: answers,
-		})
-		.then((data) => {
+		.post(`/api/quiz/${quizId}/submit`, answers)
+		.then((response) => {
 			dispatch({
 				type: QUIZ.CURRENT_QUIZ_RESULT,
-				payload: data,
+				payload: response.data,
 			});
 			dispatch(setLoader(false));
 		})

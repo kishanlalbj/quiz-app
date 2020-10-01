@@ -23,11 +23,13 @@ class Arena extends Component {
 
 	componentDidMount() {
 		this.props.getQuestions(this.props.match.params.id);
-		axios.get(`/api/quiz/${this.props.match.params.id}/time`).then((data) => {
-			this.setState({
-				time: data.time,
+		axios
+			.get(`/api/quiz/${this.props.match.params.id}/time`)
+			.then((response) => {
+				this.setState({
+					time: response.data.time,
+				});
 			});
-		});
 	}
 
 	nextQuestion = () => {

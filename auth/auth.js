@@ -65,7 +65,7 @@ const login = async (userCreds) => {
 
 		if (isMatch) {
 			let token = await jwt.sign(payload, config.SECRET, {
-				expiresIn: "2 days",
+				expiresIn: "2h",
 			});
 			console.log(token);
 			return {

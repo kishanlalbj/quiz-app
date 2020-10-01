@@ -24,11 +24,14 @@ const addQuestionsInBulk = async (quizId, questions) => {
 
 const checkAnswers = async (quizId, answers) => {
 	try {
+		console.log(answers);
 		let quizQuestions = await Question.find({ quizId: quizId });
 		let correctQuestions = [];
 
 		for (let i = 0; i < quizQuestions.length; i++) {
 			for (let j = 0; j < answers.length; j++) {
+				console.log("***", quizQuestions[i]._id, "**", answers[j].questionId);
+
 				if (quizQuestions[i]._id.toString() === answers[j].questionId) {
 					quizQuestions[i].options.map((option) => {
 						if (option.text === answers[j].answer && option.correct) {
