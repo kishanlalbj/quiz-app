@@ -58,7 +58,7 @@ router.post("/login", async (req, res) => {
  * @path /api/auth/logout
  * @method POST
  * @description Logs out the user
- * @access public
+ * @access private
  */
 router.post(
   "/logout",
