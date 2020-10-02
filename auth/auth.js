@@ -45,7 +45,7 @@ const login = async (userCreds) => {
     let user = await User.findOne({
       email: userCreds.email,
     });
-    console.log(user);
+
     if (!user) {
       return {
         success: false,

@@ -1,6 +1,11 @@
 const router = require("express").Router();
 const path = require("path");
-const { getQuiz, getQuizTime, createQuiz } = require("./quizController");
+const {
+  getQuiz,
+  getQuizTime,
+  createQuiz,
+  storeQuizResult,
+} = require("./quizController");
 const { checkAnswers } = require("../questions/questionsController");
 const passport = require("passport");
 const { checkRoles } = require("../../auth/auth");
@@ -60,6 +65,16 @@ router.post(
       let quizId = req.params.id;
       let answers = req.body;
       let resp = await checkAnswers(quizId, answers);
+
+      console.log(resp);
+      let obj = {
+        user: req.user._id,
+        percentageScored: resp.percentage,
+        passed: resp.passed,
+      };
+
+      let result = await storeQuizResult(quizId, obj);
+      console.log(result);
       res.send(resp);
     } catch (error) {
       console.log(error);

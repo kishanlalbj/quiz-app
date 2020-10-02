@@ -84,7 +84,6 @@ router.post(
  * @description Check if username exists
  * @access public
  */
-
 router.post("/check/username", async (req, res) => {
   try {
     let count = await User.find({ username: req.body.username }).count();
@@ -96,4 +95,28 @@ router.post("/check/username", async (req, res) => {
   }
 });
 
+/**
+ * @path /api/auth/user
+ * @method POST
+ * @description find a user by email
+ * @access private
+ */
+router.post(
+  "/user",
+  passport.authenticate("jwt", { session: false }),
+  checkRoles([roles.ADMIN]),
+  async (req, res) => {
+    try {
+      let user = await User.findOne({ email: req.body.email }).select("email");
+      console.log(user);
+
+      if (user) {
+        res.status(200).send({ success: true, user });
+      }
+      res.status(404).send({ success: false, message: "User not found" });
+    } catch (error) {
+      res.status(500).send({ message: "Internal Server Error" });
+    }
+  }
+);
 module.exports = router;
