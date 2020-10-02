@@ -3,6 +3,7 @@ const auth = require("../../auth/auth");
 const roles = require("../../auth/roles");
 const passport = require("passport");
 const { checkRoles } = require("../../auth/auth");
+const User = require("../../models/User");
 
 /**
  * @path /api/auth/register
@@ -76,5 +77,23 @@ router.post(
     }
   }
 );
+
+/**
+ * @path /api/auth/check/username
+ * @method POST
+ * @description Check if username exists
+ * @access public
+ */
+
+router.post("/check/username", async (req, res) => {
+  try {
+    let count = await User.find({ username: req.body.username }).count();
+
+    res.status(200).send({ available: count === 0 });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({ message: "Internal Server Error" });
+  }
+});
 
 module.exports = router;

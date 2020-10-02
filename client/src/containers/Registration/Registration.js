@@ -1,26 +1,72 @@
-import React, { useState } from "react";
+import React, { useCallback, useState, useRef } from "react";
 import { Container, Form, Card, Button } from "react-bootstrap";
+import axios from "axios";
 import "./Registration.scss";
 
 const Registration = (props) => {
   const [name, setName] = useState("");
-  const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const usernameRef = useRef(null);
+  const [isUnique, setIsUnique] = useState("");
+
+  const checkUsernameAvailability = async () => {
+    if (usernameRef.current.value.length === 0) {
+      setIsUnique("Username cannot be empty");
+      return;
+    }
+    if (usernameRef.current.value.length >= 6) {
+      let response = await axios.post("/api/auth/check/username", {
+        username: usernameRef.current.value,
+      });
+
+      if (response.data.available) {
+        setIsUnique("Username is available");
+      } else {
+        setIsUnique("Username is taken by someone else");
+      }
+    }
+  };
 
   const onSubmitHandler = async (e) => {
     try {
       e.preventDefault();
       if (password === confirmPassword) {
-        console.log(username, email, password, confirmPassword);
+        let response = await axios.post("/api/auth/register", {
+          name,
+          email,
+          username: usernameRef.current.value,
+          password,
+          confirmPassword,
+        });
+        console.log(response);
+        if (response.data.success) {
+          props.history.push("/");
+        }
       } else {
-        alert("Passwords not matching");
+        alert("Passwords doesn't match");
       }
     } catch (error) {
       console.log(error);
     }
   };
+
+  function debounce(func, delay) {
+    let timeout;
+    return () => {
+      if (timeout) clearTimeout(timeout);
+      timeout = setTimeout(() => {
+        timeout = null;
+        func();
+      }, delay);
+    };
+  }
+
+  const debounceOnChange = useCallback(
+    debounce(checkUsernameAvailability, 400),
+    []
+  );
 
   return (
     <React.Fragment>
@@ -44,6 +90,7 @@ const Registration = (props) => {
                   placeholder="Name"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
+                  controlid="validationCustom01"
                   required
                 ></Form.Control>
               </Form.Group>
@@ -53,10 +100,14 @@ const Registration = (props) => {
                 <Form.Control
                   type="text"
                   placeholder="Username"
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
+                  ref={usernameRef}
+                  onChange={(e) => debounceOnChange(e.target.value)}
+                  controlid="validationCustom02"
+                  minLength="6"
+                  maxLength="18"
                   required
                 ></Form.Control>
+                <p className="text-muted">{isUnique}</p>
               </Form.Group>
 
               <Form.Group>
@@ -66,6 +117,7 @@ const Registration = (props) => {
                   placeholder="Email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
+                  controlid="validationCustom03"
                   required
                 ></Form.Control>
               </Form.Group>
@@ -77,6 +129,7 @@ const Registration = (props) => {
                   placeholder="Password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
+                  controlid="validationCustom04"
                   required
                 ></Form.Control>
               </Form.Group>
@@ -88,6 +141,7 @@ const Registration = (props) => {
                   placeholder="Confirm Password"
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
+                  controlid="validationCustom05"
                   required
                 ></Form.Control>
               </Form.Group>

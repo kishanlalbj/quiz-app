@@ -23,17 +23,17 @@ app.use(passport.initialize());
 app.use(express.static(path.join(__dirname, "public")));
 
 mongoose
-	.connect(config.DATABASE_URL, {
-		useNewUrlParser: true,
-		useUnifiedTopology: true,
-		useCreateIndex: true,
-	})
-	.then(() => {
-		console.log("Database connected");
-	})
-	.catch((err) => {
-		console.log("Error Connecting Database");
-	});
+  .connect(config.DATABASE_URL, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useCreateIndex: true,
+  })
+  .then(() => {
+    console.log("Database connected");
+  })
+  .catch((err) => {
+    console.log("Error Connecting Database");
+  });
 
 app.use("/api/quiz", quizRouter);
 app.use("/api/questions", questionsRouter);
