@@ -41,8 +41,8 @@ const Login = (props) => {
               <Form.Group>
                 <Form.Label>Email</Form.Label>
                 <Form.Control
-                  type="email"
-                  placeholder="Email"
+                  type="text"
+                  placeholder="Email or Username"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required

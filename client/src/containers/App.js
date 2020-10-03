@@ -2,16 +2,18 @@ import React, { Component } from "react";
 import "./App.scss";
 import { Container } from "react-bootstrap";
 import { Route, Switch, withRouter } from "react-router-dom";
+import { connect } from "react-redux";
+
 import Header from "../components/Header/Header";
 import Home from "./Home/Home";
 import Arena from "./Arena/Arena";
 import Result from "./Result/Result";
 import Admin from "./Admin/Admin";
 import Login from "./Login/Login";
-import { connect } from "react-redux";
-import { AUTH_TYPES } from "../store/types/authTypes";
 import ProtectedRoute from "../components/ProtectedRoute/ProtectedRoute";
 import Registration from "./Registration/Registration";
+
+import { AUTH_TYPES } from "../store/types/authTypes";
 import { checkAuth, getUserFromToken } from "../utils/checkAuth";
 
 class App extends Component {

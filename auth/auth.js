@@ -43,9 +43,9 @@ const registerUser = async (userDetails, role) => {
 const login = async (userCreds) => {
   try {
     let user = await User.findOne({
-      email: userCreds.email,
+      $or: [{ email: userCreds.email }, { username: userCreds.email }],
     });
-
+    console.log(user);
     if (!user) {
       return {
         success: false,
@@ -73,6 +73,7 @@ const login = async (userCreds) => {
       };
     }
   } catch (error) {
+    console.log(error);
     return {
       success: false,
       message: error.message,
