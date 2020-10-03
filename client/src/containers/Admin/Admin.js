@@ -3,7 +3,7 @@ import { Switch } from "react-router-dom";
 import { Row, Col } from "react-bootstrap";
 import QuizTable from "../../components/Quiz/QuizTable";
 import NewQuiz from "../../components/NewQuiz/NewQuiz";
-import ProtectedRoute from "../../utils/ProtectedRoute";
+import ProtectedRoute from "../../components/ProtectedRoute/ProtectedRoute";
 
 const Admin = (props) => {
   return (

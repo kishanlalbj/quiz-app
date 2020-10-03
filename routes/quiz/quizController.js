@@ -1,4 +1,5 @@
 const Quiz = require("../../models/Quiz");
+const ResultSchema = require("../../models/Result");
 
 const getQuiz = async () => {
   try {
@@ -34,15 +35,13 @@ const getQuizTime = async (quizId) => {
 
 const storeQuizResult = async (quizId, quizResult) => {
   try {
-    let result = await Quiz.findByIdAndUpdate(
-      quizId,
-      {
-        $push: { result: quizResult },
-      },
-      { new: true }
-    );
-    console.log(result);
-    return result;
+    console.log(quizId, quizResult);
+    let quiz = await Quiz.find({
+      _id: quizId,
+    });
+
+    console.log("User", quiz);
+    return user;
   } catch (error) {
     console.log(error);
     return error;

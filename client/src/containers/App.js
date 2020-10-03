@@ -2,34 +2,27 @@ import React, { Component } from "react";
 import "./App.scss";
 import { Container } from "react-bootstrap";
 import { Route, Switch, withRouter } from "react-router-dom";
-import jwt_decode from "jwt-decode";
 import Header from "../components/Header/Header";
 import Home from "./Home/Home";
 import Arena from "./Arena/Arena";
 import Result from "./Result/Result";
 import Admin from "./Admin/Admin";
 import Login from "./Login/Login";
-import setAuthHeader from "../utils/api";
 import { connect } from "react-redux";
 import { AUTH_TYPES } from "../store/types/authTypes";
-import ProtectedRoute from "../utils/ProtectedRoute";
+import ProtectedRoute from "../components/ProtectedRoute/ProtectedRoute";
 import Registration from "./Registration/Registration";
+import { checkAuth, getUserFromToken } from "../utils/checkAuth";
 
 class App extends Component {
   constructor(props) {
     super(props);
-    if (localStorage.jwtToken) {
-      const token = localStorage.getItem("jwtToken");
-      setAuthHeader(token);
-      const decoded = jwt_decode(token);
-      const currentTime = Date.now() / 1000;
-      if (decoded.exp < currentTime) {
-        this.props.history.push("/");
-      } else {
-        if (decoded.role === "admin") this.props.history.push("/admin");
-        else this.props.history.push("/home");
-        this.props.setUser(decoded);
-      }
+
+    if (checkAuth()) {
+      const user = getUserFromToken();
+      this.props.setUser(user);
+      if (user.role === "admin") this.props.history.push("/admin");
+      else this.props.history.push("/home");
     } else {
       this.props.history.push("/");
     }

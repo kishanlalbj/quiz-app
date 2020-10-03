@@ -1,6 +1,7 @@
 import React from "react";
 import { Redirect, Route } from "react-router-dom";
 import { connect } from "react-redux";
+import { checkAuth } from "../../utils/checkAuth";
 
 const ProtectedRoute = ({ component: Component, authenticated, ...rest }) => {
   return (
@@ -8,11 +9,7 @@ const ProtectedRoute = ({ component: Component, authenticated, ...rest }) => {
       <Route
         {...rest}
         render={(props) =>
-          authenticated ? (
-            <Component {...props}></Component>
-          ) : (
-            <Redirect to="/" />
-          )
+          checkAuth() ? <Component {...props}></Component> : <Redirect to="/" />
         }
       ></Route>
     </React.Fragment>

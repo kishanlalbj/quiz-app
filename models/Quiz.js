@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const ResultSchema = require("./Result");
+// const ResultSchema = require("./Result");
 
 const Schema = mongoose.Schema;
 
@@ -24,13 +24,13 @@ const QuizSchema = new Schema({
     type: Number,
     required: true,
   },
-  authorizedUsers: [
+  attemptedBy: [
     {
-      user: { type: Schema.Types.ObjectId },
+      user: { type: Schema.Types.ObjectId, ref: "user" },
+      passed: { type: Boolean },
+      percentage: { type: Number },
     },
   ],
-  attemptedBy: [Schema.Types.ObjectId],
-  result: [ResultSchema],
 });
 
 const Quiz = mongoose.model("quiz", QuizSchema);
